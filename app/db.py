@@ -13,8 +13,14 @@ SEEDS = [
 def connect(db_path=None):
     path = db_path or Config.database()
     Path(path).parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(path, check_same_thread=False)
+    conn = sqlite3.connect(path, check_same_thread=False, timeout=10)
     conn.row_factory = sqlite3.Row
+    # 并发开抽的闸门依赖写事务串行化；WAL 下读写可并行、写仍串行
+    try:
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA busy_timeout=10000")
+    except sqlite3.OperationalError:
+        pass
     return conn
 
 @contextmanager
