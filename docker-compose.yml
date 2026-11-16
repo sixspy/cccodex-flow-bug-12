@@ -1,0 +1,20 @@
+services:
+  flow-lab:
+    build: .
+    container_name: cc-flow-lab-flow-bug-12
+    ports:
+      - "6510:6300"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "6300"
+      DATABASE_PATH: /app/instance/flow_lab.db
+    volumes:
+      - flow_lab_data:/app/instance
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:6300/login', timeout=5)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+volumes:
+  flow_lab_data:

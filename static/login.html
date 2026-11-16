@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>登录 · 编排流抽取台</title>
+  <link rel="stylesheet" href="/static/flow.css" />
+</head>
+<body class="login-body">
+  <form id="f" class="panel">
+    <h1>编排流抽取台</h1>
+    <p>请输入账号与密码</p>
+    <label>账号<input name="username" autocomplete="username" /></label>
+    <label>密码<input name="password" type="password" autocomplete="current-password" /></label>
+    <p id="err" class="err"></p>
+    <button type="submit">登录</button>
+  </form>
+  <script>
+    document.getElementById('f').onsubmit = async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const r = await fetch('/api/login', {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({username: fd.get('username'), password: fd.get('password')})});
+      const j = await r.json();
+      if (!r.ok) { document.getElementById('err').textContent = j.error || '登录失败'; return; }
+      location.href = '/app/';
+    };
+  </script>
+</body>
+</html>

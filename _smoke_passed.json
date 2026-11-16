@@ -1,0 +1,12 @@
+{
+  "label": "flow-bug-12",
+  "port": 6510,
+  "login_url": "http://127.0.0.1:6510/login",
+  "http_status": 200,
+  "checks": [
+    "含登录相关文案",
+    "含密码表单线索"
+  ],
+  "passed": true,
+  "checked_at": "2026-11-16T10:00:31+08:00"
+}
